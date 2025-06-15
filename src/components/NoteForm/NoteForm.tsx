@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik, type FormikHelpers } from "formik";
 import css from "./NoteForm.module.css";
 import * as Yup from "yup";
-import type { CreateNoteValues, NoteModalFormProps } from "../../types/note";
+import type { CreateNoteValues } from "../../types/note";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "../../services/noteService";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,7 +23,11 @@ const initialValues: CreateNoteValues = {
   tag: "Todo",
 };
 
-export default function NoteForm({ onClose }: NoteModalFormProps) {
+export interface NoteFormProps {
+  onClose: () => void;
+}
+
+export default function NoteForm({ onClose }: NoteFormProps) {
   const queryClient = useQueryClient();
   const mutationCreate = useMutation({
     mutationFn: createNote,
@@ -55,7 +59,7 @@ export default function NoteForm({ onClose }: NoteModalFormProps) {
           <div className={css.formGroup}>
             <label htmlFor="title">Title</label>
             <Field id="title" type="text" name="title" className={css.input} />
-            <ErrorMessage name="title" className={css.error} />
+            <ErrorMessage name="title" component="span" className={css.error} />
           </div>
 
           <div className={css.formGroup}>
@@ -64,10 +68,14 @@ export default function NoteForm({ onClose }: NoteModalFormProps) {
               as="textarea"
               id="content"
               name="content"
-              rows="8"
+              rows={8}
               className={css.textarea}
             />
-            <ErrorMessage name="content" className={css.error} />
+            <ErrorMessage
+              name="content"
+              component="span"
+              className={css.error}
+            />
           </div>
 
           <div className={css.formGroup}>
@@ -79,7 +87,7 @@ export default function NoteForm({ onClose }: NoteModalFormProps) {
               <option value="Meeting">Meeting</option>
               <option value="Shopping">Shopping</option>
             </Field>
-            <ErrorMessage name="tag" className={css.error} />
+            <ErrorMessage name="tag" component="span" className={css.error} />
           </div>
 
           <div className={css.actions}>
@@ -90,9 +98,23 @@ export default function NoteForm({ onClose }: NoteModalFormProps) {
             >
               Cancel
             </button>
-            <button type="submit" className={css.submitButton} disabled={false}>
-              Create note
-            </button>
+            {mutationCreate.isPending ? (
+              <button
+                type="submit"
+                className={css.submitButton}
+                disabled={true}
+              >
+                Note creation...
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className={css.submitButton}
+                disabled={false}
+              >
+                Create note
+              </button>
+            )}
           </div>
         </Form>
       </Formik>

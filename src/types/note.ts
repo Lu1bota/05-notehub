@@ -2,13 +2,7 @@ export interface Note {
   id: number;
   title: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
   tag: string;
-}
-
-export interface NoteModalFormProps {
-  onClose: () => void;
 }
 
 export interface CreateNoteValues {

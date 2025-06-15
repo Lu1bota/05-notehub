@@ -17,12 +17,12 @@ export default function App() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { data, isLoading, isError, error, isSuccess } = useQuery({
-    queryKey: ["notes", currentPage, debounceQuery],
+    queryKey: ["notes", debounceQuery, currentPage],
     queryFn: () => fetchNotes(debounceQuery, currentPage),
     placeholderData: keepPreviousData,
   });
 
-  function openModal() {
+  function toggleModal() {
     setIsModalOpen(!isModalOpen);
   }
   function closeModal() {
@@ -34,20 +34,21 @@ export default function App() {
 
   function handleChange(newQuery: string) {
     setQuery(newQuery);
+    setCurrentPage(1);
   }
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox onChange={handleChange} />
-        {isSuccess && (
+        <SearchBox value={query} onChange={handleChange} />
+        {totalPage > 1 && (
           <Pagination
             totalPages={totalPage}
             currentPage={currentPage}
             setPage={setCurrentPage}
           />
         )}
-        <button className={css.button} onClick={openModal}>
+        <button className={css.button} onClick={toggleModal}>
           Create note +
         </button>
       </header>

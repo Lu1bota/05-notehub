@@ -21,8 +21,8 @@ export default function NoteList({ notes }: NoteListProps) {
     },
   });
 
-  function handleDelete(note: number) {
-    mutationDelete.mutate(note);
+  function handleDelete(noteId: number) {
+    mutationDelete.mutate(noteId);
   }
   return (
     <>
