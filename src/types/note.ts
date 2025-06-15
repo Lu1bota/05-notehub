@@ -6,3 +6,13 @@ export interface Note {
   updatedAt: string;
   tag: string;
 }
+
+export interface NoteModalFormProps {
+  onClose: () => void;
+}
+
+export interface CreateNoteValues {
+  title: string;
+  content?: string;
+  tag: "Work" | "Personal" | "Meeting" | "Shopping" | "Todo";
+}
